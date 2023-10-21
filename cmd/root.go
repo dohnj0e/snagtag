@@ -11,7 +11,7 @@ var rootCmd = &cobra.Command{
 	Short: "Snagtag is a cli tool for scraping social media platforms",
 	Long:  "Snagtag is a cli tool for scraping social media platforms, such as Youtube, Tiktok and Instagram",
 	Run: func(cmd *cobra.Command, args []string) {
-		// Code here
+		fmt.Println("Error: sub-command is required. Run 'snagtag --help' for usage information.")
 	},
 }
 

@@ -20,7 +20,7 @@ var youtubeCmd = &cobra.Command{
 	Short: "Scrape youtube for a given keyword",
 	Run: func(cmd *cobra.Command, args []string) {
 		if keyword == "" {
-			fmt.Println("Error: no key provided. Use (--keyword) to specify a keyword.")
+			fmt.Println("Error: no key provided. Use '--keyword' to specify a keyword.")
 			return
 		}
 
@@ -38,7 +38,7 @@ var tiktokCmd = &cobra.Command{
 	Short: "Scrape tiktok for a given keyword",
 	Run: func(cmd *cobra.Command, args []string) {
 		if keyword == "" {
-			fmt.Println("Error: no key provided. Use (--keyword() to specify a keyword.")
+			fmt.Println("Error: no key provided. Use '--keyword' to specify a keyword.")
 			return
 		}
 
