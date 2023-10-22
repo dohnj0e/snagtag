@@ -2,71 +2,81 @@ package youtube
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
+	"os"
 
-	"github.com/PuerkitoBio/goquery"
+	"github.com/tebeka/selenium"
 )
 
-// create and send http request to youtube
-func FetchYoutubeSearchResults(keyword string) (*http.Response, error) {
-	url := "https://youtube.com/results?search_query=" + keyword
-	resp, err := http.Get(url)
+var (
+	logger  = log.New(os.Stdout, "DEBUG: ", log.Lshortfile)
+	service *selenium.Service
+)
+
+func InitWebDriver() (selenium.WebDriver, error) {
+	var err error
+
+	const (
+		seleniumPath    = "/path/to/project/bin/selenium-server-standalone-3.141.59.jar" // absolute path to selenium
+		geckoDriverPath = "/path/to/project/bin/geckodriver"                             // absolute path to geckodriver (firefox)
+	)
+
+	// add geckodriver path to the system PATH
+	os.Setenv("PATH", os.Getenv("PATH")+":"+geckoDriverPath)
+
+	// port number
+	port := 4444
+
+	opts := []selenium.ServiceOption{
+		selenium.GeckoDriver(geckoDriverPath),
+		selenium.Output(os.Stderr),
+	}
+	service, err = selenium.NewSeleniumService(seleniumPath, port, opts...)
+
+	if err != nil {
+		fmt.Printf("Error starting the Selenium service: %v", err)
+		return nil, err
+	}
+
+	caps := selenium.Capabilities{
+		"browserName":            "firefox",
+		"firefox_binary":         "/usr/bin/firefox",
+		"webdriver.gecko.driver": geckoDriverPath,
+	}
+	wd, err := selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", port))
 
 	if err != nil {
 		return nil, err
 	}
-	return resp, nil
+	return wd, nil
 }
 
-// print html content of response
-func PrintHTML(resp *http.Response) error {
-	bodyBytes, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		return err
-	}
-	bodyString := string(bodyBytes)
-	fmt.Println(bodyString)
-
-	return nil
-}
-
-// parse html and extract data
-func ParseYoutubeSearchResults(resp *http.Response) error {
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
-
-	if err != nil {
-		return err
-	}
-
-	doc.Find(".video-title").Each(func(index int, element *goquery.Selection) {
-		title := element.Text()
-		fmt.Println(title)
-	})
-	return nil
-}
-
-// initialize scraping
 func Scrape(keyword string) error {
-	resp, err := FetchYoutubeSearchResults(keyword)
+	wd, err := InitWebDriver()
 
 	if err != nil {
 		return err
 	}
+	defer wd.Quit()
+	defer service.Stop()
 
-	// ensure body is closed after reading from it
-	defer func() {
-		if closeErr := resp.Body.Close(); closeErr != nil {
-			log.Printf("Failed to close response body: %v\n", closeErr)
+	err = wd.Get("https://youtube.com/results?search_query=" + keyword)
+	if err != nil {
+		return err
+	}
+
+	elements, err := wd.FindElements(selenium.ByCSSSelector, "span#video-title")
+	if err != nil {
+		return err
+	}
+
+	for index, element := range elements {
+		title, err := element.Text()
+		if err != nil {
+			logger.Println("Failed to retrieve element text:", err)
+		} else {
+			fmt.Printf("Video title %d: %s\n", index, title)
 		}
-	}()
-
-	err = PrintHTML(resp)
-
-	if err != nil {
-		return err
 	}
-	return ParseYoutubeSearchResults(resp)
+	return nil
 }
