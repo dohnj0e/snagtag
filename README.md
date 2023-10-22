@@ -16,7 +16,6 @@ Tailored for scraping data from social media platforms, powered by Go.
 - **TikTok Scraping:** Scrape video titles from TikTok based on a provided keyword
 - **Command-Line Interface:** Easy-to-use command-line interface for scraping operations
 
-
 ## Prerequisites
 - Go 1.15 or later
 - Selenium WebDriver
@@ -50,5 +49,5 @@ If you have any questions or need further assistance, feel free to reach out to 
 
 [💌 Contact Me](mailto:dohnj0@proton.me)
 
-## Author(s)
+## Author
 - Dohn Joe (@dohnj0)
