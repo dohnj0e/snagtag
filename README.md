@@ -12,9 +12,10 @@ Tailored for scraping data from social media platforms, powered by Go.
 5. [Author](#Author)
 
 ## Features
-- **YouTube Scraping:** Scrape video titles from YouTube based on a provided keyword
-- **TikTok Scraping:** Scrape video titles from TikTok based on a provided keyword
-- **Command-Line Interface:** Easy-to-use command-line interface for scraping operations
+- **Scraping:** Scrape video titles based on a provided keyword
+- **Command-Line Interface:** Easy-to-use command-line interface
+- **Testing:** Test for youtube and tiktok scraping functionality
+- **Errors/Logging:** Robust error handling and logging system
 
 ## Prerequisites
 - Go 1.15 or later
@@ -40,9 +41,9 @@ Tailored for scraping data from social media platforms, powered by Go.
     - `go build -o snagtag`
 
 ## Usage
-- `snagtag --platform youtube --keyword education` (for YouTube)
+- `snagtag platform youtube --keyword education` (for YouTube)
 
-- `snagtag --platform tiktok --keyword education` (for TikTok)
+- `snagtag platform tiktok --keyword education` (for TikTok)
 
 ## Support
 If you have any questions or need further assistance, feel free to reach out to me via email:
