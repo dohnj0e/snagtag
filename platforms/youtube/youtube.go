@@ -17,18 +17,18 @@ func InitWebDriver() (selenium.WebDriver, error) {
 	var err error
 
 	const (
-		seleniumPath    = "/path/to/project/bin/selenium-server-standalone-3.141.59.jar" // absolute path to selenium
-		geckoDriverPath = "/path/to/project/bin/geckodriver"                             // absolute path to geckodriver (firefox)
+		seleniumPath     = "/home/ian/Documents/DEV/projects/go/snagtag/bin/selenium-server-standalone-3.141.59.jar" // absolute path to selenium
+		chromeDriverPath = "/home/ian/Documents/DEV/projects/go/snagtag/bin/chromedriver"                            // absolute path to chromedriver (chrome)
 	)
 
-	// add geckodriver path to the system PATH
-	os.Setenv("PATH", os.Getenv("PATH")+":"+geckoDriverPath)
+	// add geckodriver path to system PATH
+	os.Setenv("PATH", os.Getenv("PATH")+":"+chromeDriverPath)
 
 	// port number
-	port := 4444
+	port := 4445
 
 	opts := []selenium.ServiceOption{
-		selenium.GeckoDriver(geckoDriverPath),
+		selenium.GeckoDriver(chromeDriverPath),
 		selenium.Output(os.Stderr),
 	}
 	service, err = selenium.NewSeleniumService(seleniumPath, port, opts...)
@@ -39,9 +39,9 @@ func InitWebDriver() (selenium.WebDriver, error) {
 	}
 
 	caps := selenium.Capabilities{
-		"browserName":            "firefox",
-		"firefox_binary":         "/usr/bin/firefox",
-		"webdriver.gecko.driver": geckoDriverPath,
+		"browserName":             "chrome",
+		"firefox_binary":          "/usr/bin/chrome",
+		"webdriver.chrome.driver": chromeDriverPath,
 	}
 	wd, err := selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", port))
 
