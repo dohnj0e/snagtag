@@ -40,7 +40,7 @@ func InitWebDriver() (selenium.WebDriver, error) {
 
 	caps := selenium.Capabilities{
 		"browserName":            "chrome",
-		"firefox_binary":         "/usr/bin/chrome",
+		"chrome_binary":          "/usr/bin/chrome",
 		"webdriver.gecko.driver": chromeDriverPath,
 	}
 	wd, err := selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", port))
