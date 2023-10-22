@@ -52,9 +52,6 @@ Tailored for scraping data from social media platforms, powered by Go.
 If you have any questions or need further assistance, feel free to reach out to me via email:
 
 [💌 Contact Me](mailto:dohnj0@proton.me)
-
-Author
-  - Dohn Joe (@dohnj0)
   
 ## Author
   - Dohn Joe (@dohnj0)
