@@ -22,7 +22,7 @@ Tailored for scraping data from social media platforms, powered by Go.
    - `git clone https://github.com/dohnj0/snagtag.git`
    - `cd snagtag`
      
-3. Install selenium webdriver
+2. Install selenium webdriver
    - Download the webdriver for your browser:
      - [Geckodriver (for Firefox)](https://github.com/mozilla/geckodriver/releases)
      - [Chrome Driver (for Chrome)](https://sites.google.com/a/chromium.org/chromedriver/)
@@ -30,6 +30,9 @@ Tailored for scraping data from social media platforms, powered by Go.
    - Move the downloaded driver(s) to a directory, for example:
      - `mv geckodriver /usr/local/bin`
      - `mv selenium /path/to/project/bin`
+    
+ 3. Build the project
+    - `go build -o snagtag`
 
 ## Usage
 - `snagtag --platform youtube --keyword education` (for YouTube)
