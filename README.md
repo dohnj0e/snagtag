@@ -2,7 +2,7 @@
 
 Tailored for scraping data from social media platforms, powered by Go.
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow.svg)](https://www.buymeacoffee.com/dohnj0) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow.svg)](https://www.buymeacoffee.com/dohnj0) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) [![Tested on Ubuntu](https://img.shields.io/badge/Tested%20on-Ubuntu-orange.svg)](https://www.ubuntu.com/) [![Beta Version](https://img.shields.io/badge/Beta%20Version-0.1.0--beta-red.svg)](https://github.com/dohnj0/snagtag/releases/tag/v0.1.0-beta)
 
 ## Table of Contents
 1. [Prerequisites](#Prerequisites)
