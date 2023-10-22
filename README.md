@@ -43,9 +43,9 @@ Tailored for scraping data from social media platforms, powered by Go.
        - `go build -o snagtag`
 
 ## Usage
-   - `snagtag platform youtube --keyword education` (for YouTube)
+   - `./snagtag platform youtube --keyword education` (for YouTube)
 
-   - `snagtag platform tiktok --keyword education` (for TikTok)
+   - `./snagtag platform tiktok --keyword education` (for TikTok)
 
 ## Support
 
