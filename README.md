@@ -11,6 +11,12 @@ Tailored for scraping data from social media platforms, powered by Go.
 4. [Support](#Support)
 5. [Author](#Author)
 
+## Features
+- **YouTube Scraping:** Scrape video titles from YouTube based on a provided keyword
+- **TikTok Scraping:** Scrape video titles from TikTok based on a provided keyword
+- **Command-Line Interface:** Easy-to-use command-line interface for scraping operations
+
+
 ## Prerequisites
 - Go 1.15 or later
 - Selenium WebDriver
