@@ -8,8 +8,8 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "snagtag",
-	Short: "Snagtag is a cli tool for scraping social media platforms",
-	Long:  "Snagtag is a cli tool for scraping social media platforms, such as Youtube, Tiktok and Instagram",
+	Short: "SnagTag - cli tool for scraping social media platforms",
+	Long:  "SnagTag - cli tool for scraping social media platforms, such as Youtube and Tiktok",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Error: sub-command is required. Run 'snagtag --help' for usage information.")
 	},

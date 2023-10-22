@@ -47,7 +47,7 @@ var tiktokCmd = &cobra.Command{
 			fmt.Printf("Error: %v\n", err)
 			return
 		}
-		fmt.Println("Scrape completed successufully")
+		fmt.Println("Scrape completed successfully")
 	},
 }
 
