@@ -1,9 +1,11 @@
 package tiktok
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/tebeka/selenium"
 )
@@ -85,7 +87,27 @@ func Login(wd selenium.WebDriver) error {
 	if err := loginButton.Click(); err != nil {
 		return err
 	}
-	return nil
+
+	// wait for url to change
+	timeout := time.After(30 * time.Second)
+	ticker := time.NewTicker(500 * time.Millisecond)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-timeout:
+			return errors.New("timed out waiting for login to complete")
+		case <-ticker.C:
+			currentURL, err := wd.CurrentURL()
+
+			if err != nil {
+				return err
+			}
+			if currentURL == "https://www.tiktok.com/foryou?lang=en" {
+				return nil // login successful
+			}
+		}
+	}
 }
 
 func Scrape(keyword string) error {
@@ -106,7 +128,7 @@ func Scrape(keyword string) error {
 		return err
 	}
 
-	elements, err := wd.FindElements(selenium.ByCSSSelector, ".video-title")
+	elements, err := wd.FindElements(selenium.ByCSSSelector, "span.tiktok-j2a19r-SpanText")
 	if err != nil {
 		return err
 	}
