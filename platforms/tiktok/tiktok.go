@@ -15,6 +15,12 @@ var (
 	service *selenium.Service
 )
 
+func waitForUser() {
+	fmt.Println("Please solve the captcha, then press Enter to continue...")
+	var input string
+	fmt.Scanln(&input) // this will block until the user presses Enter
+}
+
 func InitWebDriver() (selenium.WebDriver, error) {
 	var err error
 
@@ -127,6 +133,8 @@ func Scrape(keyword string) error {
 	if err != nil {
 		return err
 	}
+
+	waitForUser()
 
 	elements, err := wd.FindElements(selenium.ByCSSSelector, "span.tiktok-j2a19r-SpanText")
 	if err != nil {
