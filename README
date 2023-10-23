@@ -29,7 +29,7 @@ Tailored for scraping data from social media platforms, powered by Go.
    
 ## Installation
    1. Clone the repository
-      - `git clone https://github.com/dohnj0/snagtag.git`
+      - `git clone https://github.com/dohnj0e/snagtag.git`
       - `cd snagtag`
      
    2. Install selenium webdriver
