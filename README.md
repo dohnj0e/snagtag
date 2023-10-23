@@ -18,6 +18,7 @@ Tailored for scraping data from social media platforms, powered by Go.
    - **Command-Line Interface:** Easy-to-use command-line interface
    - **Testing:** Test for youtube and tiktok scraping functionality
    - **Errors/Logging:** Robust error handling and logging system
+   - **Authentication:** Handling authentication to Tiktok
 
 ## Prerequisites
    - Go 1.15 or later
