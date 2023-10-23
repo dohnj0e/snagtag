@@ -19,6 +19,7 @@ Tailored for scraping data from social media platforms, powered by Go.
    - **Testing:** Test for youtube and tiktok scraping functionality
    - **Errors/Logging:** Robust error handling and logging system
    - **Authentication:** Handling authentication to Tiktok
+   - **Captcha:** Waits user to interact with captcha before proceeding
 
 ## Prerequisites
    - Go 1.15 or later
