@@ -48,8 +48,11 @@ Tailored for scraping data from social media platforms, powered by Go.
    d. Move the downloaded driver(s) to a directory:
       - `mv geckodriver /usr/local/bin`
       - `mv chromedriver /usr/local/bin`
+  
+3. Install all dependencies
+   - `go mod tidy`
 
-4. Build the project
+5. Build the project
    - `go build -o snagtag`
 
 ## Usage
