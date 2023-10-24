@@ -6,30 +6,41 @@ import (
 	"os"
 	"time"
 
+	"github.com/dohnj0e/snagtag/config"
 	"github.com/sirupsen/logrus"
 	"github.com/tebeka/selenium"
 )
 
 var (
+	cfg     *config.Config
 	logger  *logrus.Logger
 	service *selenium.Service
 	err     error
-)
 
-const (
-	seleniumPath     = "/home/ian/Documents/DEV/projects/go/snagtag/bin/selenium-server-standalone-3.141.59.jar" // absolute path to selenium
-	chromeDriverPath = "/home/ian/Documents/DEV/projects/go/snagtag/bin/chromedriver"                            // absolute path to chromedriver (chrome)
-	port             = 4444                                                                                      // port number
-	searchURL        = "https://www.tiktok.com/search/video?q="                                                  // url for search query (tiktok)
+	seleniumPath     string
+	chromeDriverPath string
+	port             int
+	searchURL        string
 )
 
 func Init() {
 	logger = logrus.New()
 	logger.Out = os.Stdout
-	logger.Level = logrus.InfoLevel // set logging level
+	logger.Level = logrus.InfoLevel
 	logger.Formatter = &logrus.TextFormatter{
 		DisableTimestamp: true,
 	}
+
+	cfg, err = config.LoadConfig("config.yaml")
+
+	if err != nil {
+		panic(err)
+	}
+
+	seleniumPath = cfg.SeleniumPath
+	chromeDriverPath = cfg.ChromeDriverPath
+	port = cfg.Port
+	searchURL = cfg.TiktokSearchURL
 }
 
 func waitForUser() {
