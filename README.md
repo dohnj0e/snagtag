@@ -1,4 +1,4 @@
-# SnagTag [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/dohnj0)
+# SnagTag
 
 Tailored for scraping data from social media platforms, powered by Go.
 
