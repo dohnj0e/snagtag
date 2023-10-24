@@ -2,34 +2,42 @@ package youtube
 
 import (
 	"fmt"
-	"log"
+	"io/ioutil"
 	"os"
+	"strings"
 
+	"github.com/sirupsen/logrus"
 	"github.com/tebeka/selenium"
 )
 
 var (
-	logger  = log.New(os.Stdout, "DEBUG: ", log.Lshortfile)
+	logger  *logrus.Logger
 	service *selenium.Service
+	err     error
 )
 
+const (
+	seleniumPath     = "/home/ian/Documents/DEV/projects/go/snagtag/bin/selenium-server-standalone-3.141.59.jar" // absolute path to selenium
+	chromeDriverPath = "/home/ian/Documents/DEV/projects/go/snagtag/bin/chromedriver"                            // absolute path to chromedriver (chrome)
+	port             = 4444                                                                                      // port number
+	searchURL        = "https://youtube.com/results?search_query="                                               // url for search query (youtube)
+)
+
+func Init() {
+	logger = logrus.New()
+	logger.Out = os.Stdout
+	logger.Level = logrus.InfoLevel // set logging level
+	logger.Formatter = &logrus.TextFormatter{
+		DisableTimestamp: true,
+	}
+}
+
 func InitWebDriver() (selenium.WebDriver, error) {
-	var err error
-
-	const (
-		seleniumPath     = "/home/ian/Documents/DEV/projects/go/snagtag/bin/selenium-server-standalone-3.141.59.jar" // absolute path to selenium
-		chromeDriverPath = "/home/ian/Documents/DEV/projects/go/snagtag/bin/chromedriver"                            // absolute path to chromedriver (chrome)
-	)
-
-	// add geckodriver path to system PATH
 	os.Setenv("PATH", os.Getenv("PATH")+":"+chromeDriverPath)
-
-	// port number
-	port := 4445
 
 	opts := []selenium.ServiceOption{
 		selenium.GeckoDriver(chromeDriverPath),
-		selenium.Output(os.Stderr),
+		selenium.Output(ioutil.Discard),
 	}
 	service, err = selenium.NewSeleniumService(seleniumPath, port, opts...)
 
@@ -60,12 +68,12 @@ func Scrape(keyword string) error {
 	defer wd.Quit()
 	defer service.Stop()
 
-	err = wd.Get("https://youtube.com/results?search_query=" + keyword)
+	err = wd.Get(searchURL + keyword)
 	if err != nil {
 		return err
 	}
 
-	elements, err := wd.FindElements(selenium.ByCSSSelector, "span#video-title")
+	elements, err := wd.FindElements(selenium.ByCSSSelector, "a#video-title")
 	if err != nil {
 		return err
 	}
@@ -73,10 +81,14 @@ func Scrape(keyword string) error {
 	for index, element := range elements {
 		title, err := element.Text()
 		if err != nil {
-			logger.Println("Failed to retrieve element text:", err)
+			logger.Error("Failed to retrieve element text:", err)
 		} else {
-			fmt.Printf("Video title %d: %s\n", index, title)
+			if title != "" && !strings.Contains(title, "Mix -") {
+				fmt.Printf("%d: %s\n", index, title)
+			}
 		}
 	}
+	fmt.Printf("\n")
+	logger.Info("Scrape completed successfully")
 	return nil
 }

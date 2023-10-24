@@ -29,7 +29,6 @@ var youtubeCmd = &cobra.Command{
 			fmt.Printf("Error: %v\n", err)
 			return
 		}
-		fmt.Println("Scrape completed successfully")
 	},
 }
 
@@ -47,7 +46,6 @@ var tiktokCmd = &cobra.Command{
 			fmt.Printf("Error: %v\n", err)
 			return
 		}
-		fmt.Println("Scrape completed successfully")
 	},
 }
 

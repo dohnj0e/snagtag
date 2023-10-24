@@ -4,9 +4,8 @@ import (
 	"testing"
 )
 
-// test for Scrape function
 func TestScrape(t *testing.T) {
-	keyword := "dance"
+	keyword := "travel"
 	err := Scrape(keyword)
 
 	if err != nil {

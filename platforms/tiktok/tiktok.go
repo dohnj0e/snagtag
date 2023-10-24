@@ -3,46 +3,51 @@ package tiktok
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/tebeka/selenium"
 )
 
 var (
-	logger  = log.New(os.Stdout, "DEBUG: ", log.Lshortfile)
+	logger  *logrus.Logger
 	service *selenium.Service
+	err     error
 )
 
+const (
+	seleniumPath     = "/home/ian/Documents/DEV/projects/go/snagtag/bin/selenium-server-standalone-3.141.59.jar" // absolute path to selenium
+	chromeDriverPath = "/home/ian/Documents/DEV/projects/go/snagtag/bin/chromedriver"                            // absolute path to chromedriver (chrome)
+	port             = 4444                                                                                      // port number
+	searchURL        = "https://www.tiktok.com/search/video?q="                                                  // url for search query (tiktok)
+)
+
+func Init() {
+	logger = logrus.New()
+	logger.Out = os.Stdout
+	logger.Level = logrus.InfoLevel // set logging level
+	logger.Formatter = &logrus.TextFormatter{
+		DisableTimestamp: true,
+	}
+}
+
 func waitForUser() {
-	fmt.Println("Please solve the captcha, then press Enter to continue...")
+	logger.Warn("Please solve the captcha, then press Enter to continue...")
 	var input string
-	fmt.Scanln(&input) // this will block until the user presses Enter
+	fmt.Scanln(&input)
 }
 
 func InitWebDriver() (selenium.WebDriver, error) {
-	var err error
-
-	const (
-		seleniumPath     = "/home/ian/Documents/DEV/projects/go/snagtag/bin/selenium-server-standalone-3.141.59.jar" // absolute path to selenium
-		chromeDriverPath = "/home/ian/Documents/DEV/projects/go/snagtag/bin/chromedriver"                            // absolute path to chromedriver (chrome)
-	)
-
-	// add geckodriver path to system PATH
 	os.Setenv("PATH", os.Getenv("PATH")+":"+chromeDriverPath)
-
-	// port number
-	port := 4445
 
 	opts := []selenium.ServiceOption{
 		selenium.GeckoDriver(chromeDriverPath),
-		selenium.Output(os.Stderr),
 	}
 	service, err = selenium.NewSeleniumService(seleniumPath, port, opts...)
 
 	if err != nil {
-		fmt.Printf("Error starting the Selenium service: %v", err)
+		logger.Printf("Error starting the Selenium service: %v", err)
 		return nil, err
 	}
 
@@ -74,7 +79,6 @@ func Login(wd selenium.WebDriver) error {
 		return err
 	}
 
-	// tiktok credentials
 	username := os.Getenv("TIKTOK_USERNAME")
 	if err := usernameField.SendKeys(username); err != nil {
 		return err
@@ -94,9 +98,12 @@ func Login(wd selenium.WebDriver) error {
 		return err
 	}
 
+	waitForUser()
+
 	// wait for url to change
 	timeout := time.After(30 * time.Second)
 	ticker := time.NewTicker(500 * time.Millisecond)
+
 	defer ticker.Stop()
 
 	for {
@@ -129,7 +136,7 @@ func Scrape(keyword string) error {
 		return err
 	}
 
-	err = wd.Get("https://www.tiktok.com/search/video?q=" + keyword)
+	err = wd.Get(searchURL + keyword)
 	if err != nil {
 		return err
 	}
@@ -144,10 +151,14 @@ func Scrape(keyword string) error {
 	for index, element := range elements {
 		title, err := element.Text()
 		if err != nil {
-			logger.Println("Failed to retrieve element text:", err)
+			logger.Error("Failed to retrieve element text:", err)
 		} else {
-			fmt.Printf("Video title %d: %s\n", index, title)
+			if title != "" {
+				fmt.Printf("%d: %s\n", index, title)
+			}
 		}
 	}
+	fmt.Printf("\n")
+	logger.Info("Scrape completed successfully")
 	return nil
 }
