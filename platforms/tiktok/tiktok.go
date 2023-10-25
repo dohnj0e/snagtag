@@ -65,7 +65,7 @@ func InitWebDriver() (selenium.WebDriver, error) {
 }
 
 func Login(wd selenium.WebDriver) error {
-	if err := wd.Get("https://www.tiktok.com/login/phone-or-email"); err != nil {
+	if err := wd.Get("https://www.tiktok.com/login/phone-or-email/email"); err != nil {
 		return err
 	}
 
