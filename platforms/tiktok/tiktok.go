@@ -1,19 +1,17 @@
 package tiktok
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/dohnj0e/snagtag/config"
-	"github.com/sirupsen/logrus"
+	"github.com/dohnj0e/snagtag/logger"
 	"github.com/tebeka/selenium"
 )
 
 var (
 	cfg     *config.Config
-	logger  *logrus.Logger
 	service *selenium.Service
 	err     error
 
@@ -24,13 +22,6 @@ var (
 )
 
 func Init() {
-	logger = logrus.New()
-	logger.Out = os.Stdout
-	logger.Level = logrus.InfoLevel
-	logger.Formatter = &logrus.TextFormatter{
-		DisableTimestamp: true,
-	}
-
 	cfg, err = config.LoadConfig("config.yaml")
 
 	if err != nil {
@@ -44,7 +35,7 @@ func Init() {
 }
 
 func waitForUser() {
-	logger.Warn("Please solve the captcha, then press Enter to continue...")
+	logger.Log.Warnln("Please solve the captcha, then press Enter to continue...")
 	var input string
 	fmt.Scanln(&input)
 }
@@ -52,20 +43,18 @@ func waitForUser() {
 func InitWebDriver() (selenium.WebDriver, error) {
 	os.Setenv("PATH", os.Getenv("PATH")+":"+chromeDriverPath)
 
-	opts := []selenium.ServiceOption{
-		selenium.GeckoDriver(chromeDriverPath),
-	}
+	opts := []selenium.ServiceOption{}
 	service, err = selenium.NewSeleniumService(seleniumPath, port, opts...)
 
 	if err != nil {
-		logger.Printf("Error starting the Selenium service: %v", err)
+		logger.Log.Errorln("Error starting the Selenium service: ", err)
 		return nil, err
 	}
 
 	caps := selenium.Capabilities{
-		"browserName":            "chrome",
-		"chrome_binary":          "/usr/bin/chrome",
-		"webdriver.gecko.driver": chromeDriverPath,
+		"browserName":             "chrome",
+		"chrome_binary":           "/usr/bin/chrome",
+		"webdriver.chrome.driver": chromeDriverPath,
 	}
 	wd, err := selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", port))
 
@@ -76,7 +65,7 @@ func InitWebDriver() (selenium.WebDriver, error) {
 }
 
 func Login(wd selenium.WebDriver) error {
-	if err := wd.Get("https://www.tiktok.com/login/phone-or-email/email"); err != nil {
+	if err := wd.Get("https://www.tiktok.com/login/phone-or-email"); err != nil {
 		return err
 	}
 
@@ -111,7 +100,6 @@ func Login(wd selenium.WebDriver) error {
 
 	waitForUser()
 
-	// wait for url to change
 	timeout := time.After(30 * time.Second)
 	ticker := time.NewTicker(500 * time.Millisecond)
 
@@ -120,7 +108,7 @@ func Login(wd selenium.WebDriver) error {
 	for {
 		select {
 		case <-timeout:
-			return errors.New("timed out waiting for login to complete")
+			logger.Log.Errorln("Timed out waiting for login to complete")
 		case <-ticker.C:
 			currentURL, err := wd.CurrentURL()
 
@@ -156,13 +144,13 @@ func Scrape(keyword string) error {
 
 	elements, err := wd.FindElements(selenium.ByCSSSelector, "span.tiktok-j2a19r-SpanText")
 	if err != nil {
-		return err
+		logger.Log.Errorln("Failed to find elements: ", err)
 	}
 
 	for index, element := range elements {
 		title, err := element.Text()
 		if err != nil {
-			logger.Error("Failed to retrieve element text:", err)
+			logger.Log.Errorln("Failed to retrieve element text: ", err)
 		} else {
 			if title != "" {
 				fmt.Printf("%d: %s\n", index, title)
@@ -170,6 +158,6 @@ func Scrape(keyword string) error {
 		}
 	}
 	fmt.Printf("\n")
-	logger.Info("Scrape completed successfully")
+	logger.Log.Info("Scrape completed successfully")
 	return nil
 }
