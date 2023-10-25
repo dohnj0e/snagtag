@@ -1,8 +1,8 @@
-# SnagTag [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/dohnj0)
+# SnagTag
 
 Tailored for scraping data from social media platforms, powered by Go.
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow.svg)](https://www.buymeacoffee.com/dohnj0) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) [![Tested on Ubuntu](https://img.shields.io/badge/Tested%20on-Ubuntu-orange.svg)](https://www.ubuntu.com/) [![Beta Version](https://img.shields.io/badge/Beta%20Version-0.1.0--beta-red.svg)](https://github.com/dohnj0e/snagtag/releases/tag/v0.1.0-beta)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow.svg)](https://www.buymeacoffee.com/dohnj0) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) [![Tested on Ubuntu](https://img.shields.io/badge/Tested%20on-Ubuntu-orange.svg)](https://www.ubuntu.com/) [![Beta Version](https://img.shields.io/badge/Stable%20Version-1.0.0--stable-green.svg)](https://github.com/dohnj0e/snagtag/releases/tag/v1.0.0-stable)
 
 ## Table of Contents
   - [Table of Contents](#table-of-contents)
@@ -20,6 +20,7 @@ Tailored for scraping data from social media platforms, powered by Go.
    - **Errors/Logging:** Robust error handling and logging system
    - **Authentication:** Handling authentication to Tiktok
    - **Captcha:** Waits user to interact with captcha before proceeding
+   - **Config:** Configuration file to setup all you need
 
 ## Prerequisites
    - Go 1.15 or later
@@ -57,8 +58,11 @@ Tailored for scraping data from social media platforms, powered by Go.
 
 ## Usage
    - `./snagtag platform youtube --keyword education` (for YouTube)
-
    - `./snagtag platform tiktok --keyword education` (for TikTok)
+
+## ENV Variables (for TikTok)
+  - `EXPORT TIKTOK_USERNAME='your_tiktok_username'`
+  - `EXPORT TIKTOK_PASSWORD='your_tiktok_password'`
 
 ## Support
 
