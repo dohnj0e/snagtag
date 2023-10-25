@@ -6,13 +6,12 @@ import (
 	"strings"
 
 	"github.com/dohnj0e/snagtag/config"
-	"github.com/sirupsen/logrus"
+	"github.com/dohnj0e/snagtag/logger"
 	"github.com/tebeka/selenium"
 )
 
 var (
 	cfg     *config.Config
-	logger  *logrus.Logger
 	service *selenium.Service
 	err     error
 
@@ -23,17 +22,9 @@ var (
 )
 
 func Init() {
-	logger = logrus.New()
-	logger.Out = os.Stdout
-	logger.Level = logrus.InfoLevel
-	logger.Formatter = &logrus.TextFormatter{
-		DisableTimestamp: true,
-	}
-
 	cfg, err = config.LoadConfig("config.yaml")
-
 	if err != nil {
-		panic(err)
+		logger.Log.Error(err)
 	}
 
 	seleniumPath = cfg.SeleniumPath
@@ -45,13 +36,11 @@ func Init() {
 func InitWebDriver() (selenium.WebDriver, error) {
 	os.Setenv("PATH", os.Getenv("PATH")+":"+chromeDriverPath)
 
-	opts := []selenium.ServiceOption{
-		selenium.GeckoDriver(chromeDriverPath),
-	}
+	opts := []selenium.ServiceOption{}
 	service, err = selenium.NewSeleniumService(seleniumPath, port, opts...)
 
 	if err != nil {
-		fmt.Printf("Error starting the Selenium service: %v", err)
+		logger.Log.Error("Error starting the Selenium service: ", err)
 		return nil, err
 	}
 
@@ -84,13 +73,13 @@ func Scrape(keyword string) error {
 
 	elements, err := wd.FindElements(selenium.ByCSSSelector, "a#video-title")
 	if err != nil {
-		return err
+		logger.Log.Errorln("Failed to find elements", err)
 	}
 
 	for index, element := range elements {
 		title, err := element.Text()
 		if err != nil {
-			logger.Error("Failed to retrieve element text:", err)
+			logger.Log.Errorln("Failed to retrieve element text: ", err)
 		} else {
 			if title != "" && !strings.Contains(title, "Mix -") {
 				fmt.Printf("%d: %s\n", index, title)
@@ -98,6 +87,7 @@ func Scrape(keyword string) error {
 		}
 	}
 	fmt.Printf("\n")
-	logger.Info("Scrape completed successfully")
+	logger.Log.Info("Scrape completed successfully")
+
 	return nil
 }
