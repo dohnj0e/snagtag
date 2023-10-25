@@ -23,8 +23,9 @@ var (
 
 func Init() {
 	cfg, err = config.LoadConfig("config.yaml")
+
 	if err != nil {
-		logger.Log.Error(err)
+		logger.Log.Errorln("Failed to load config file: ", err)
 	}
 
 	seleniumPath = cfg.SeleniumPath
@@ -40,7 +41,7 @@ func InitWebDriver() (selenium.WebDriver, error) {
 	service, err = selenium.NewSeleniumService(seleniumPath, port, opts...)
 
 	if err != nil {
-		logger.Log.Error("Error starting the Selenium service: ", err)
+		logger.Log.Errorln("Error starting the Selenium service: ", err)
 		return nil, err
 	}
 
@@ -73,7 +74,7 @@ func Scrape(keyword string) error {
 
 	elements, err := wd.FindElements(selenium.ByCSSSelector, "a#video-title")
 	if err != nil {
-		logger.Log.Errorln("Failed to find elements", err)
+		logger.Log.Errorln("Failed to find elements: ", err)
 	}
 
 	for index, element := range elements {
