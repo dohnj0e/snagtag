@@ -22,10 +22,10 @@ var (
 )
 
 func Init() {
-	cfg, err = config.LoadConfig("config.yaml")
+	cfg, err = config.LoadConfig("/path/to/project/config.yaml")
 
 	if err != nil {
-		panic(err)
+		logger.Log.Errorln("Failed to load config file: ", err)
 	}
 
 	seleniumPath = cfg.SeleniumPath
@@ -48,7 +48,6 @@ func InitWebDriver() (selenium.WebDriver, error) {
 
 	if err != nil {
 		logger.Log.Errorln("Error starting the Selenium service: ", err)
-		return nil, err
 	}
 
 	caps := selenium.Capabilities{
@@ -159,5 +158,6 @@ func Scrape(keyword string) error {
 	}
 	fmt.Printf("\n")
 	logger.Log.Info("Scrape completed successfully")
+
 	return nil
 }
