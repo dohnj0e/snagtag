@@ -22,7 +22,7 @@ var (
 )
 
 func Init() {
-	cfg, err = config.LoadConfig("/path/to/project/config.yaml")
+	cfg, err = config.LoadConfig("/path/to/project/config.yaml") // absolute path
 
 	if err != nil {
 		logger.Log.Errorln("Failed to load config file: ", err)

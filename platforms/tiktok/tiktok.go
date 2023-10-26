@@ -22,7 +22,7 @@ var (
 )
 
 func Init() {
-	cfg, err = config.LoadConfig("/path/to/project/config.yaml")
+	cfg, err = config.LoadConfig("/path/to/project/config.yaml") // absolute path
 
 	if err != nil {
 		logger.Log.Errorln("Failed to load config file: ", err)
@@ -141,7 +141,7 @@ func Scrape(keyword string) error {
 
 	waitForUser()
 
-	elements, err := wd.FindElements(selenium.ByCSSSelector, "span.tiktok-j2a19r-SpanText")
+	elements, err := wd.FindElements(selenium.ByCSSSelector, "div.tiktok-1iy6zew-DivContainer")
 	if err != nil {
 		logger.Log.Errorln("Failed to find elements: ", err)
 	}

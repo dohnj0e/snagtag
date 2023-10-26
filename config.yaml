@@ -1,4 +1,4 @@
-seleniumPath: "/path/to/project/bin/selenium-server-standalone-3.141.59.jar"
+seleniumPath: "/path/to/project/bin/selenium-server-standalone-3.141.59.jar" # absolute path
 chromeDriverPath: "path/to/project/bin/chromedriver"
 port: 4444
 youtubeSearchURL: "https://youtube.com/results?search_query="
