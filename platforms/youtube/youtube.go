@@ -2,6 +2,7 @@ package youtube
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"strings"
 
@@ -59,15 +60,17 @@ func InitWebDriver() (selenium.WebDriver, error) {
 }
 
 func Scrape(keyword string) error {
-	wd, err := InitWebDriver()
+	encodedKeyword := url.QueryEscape(keyword)
+	searchURL = fmt.Sprintf("https://www.youtube.com/results?search_query=%s", encodedKeyword)
 
+	wd, err := InitWebDriver()
 	if err != nil {
 		return err
 	}
 	defer wd.Quit()
 	defer service.Stop()
 
-	err = wd.Get(searchURL + keyword)
+	err = wd.Get(searchURL)
 	if err != nil {
 		return err
 	}

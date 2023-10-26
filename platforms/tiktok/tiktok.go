@@ -2,6 +2,7 @@ package tiktok
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"time"
 
@@ -122,8 +123,10 @@ func Login(wd selenium.WebDriver) error {
 }
 
 func Scrape(keyword string) error {
-	wd, err := InitWebDriver()
+	encodedKeyword := url.QueryEscape(keyword)
+	searchURL = fmt.Sprintf("https://www.tiktok.com/search/video?q=%s", encodedKeyword)
 
+	wd, err := InitWebDriver()
 	if err != nil {
 		return err
 	}
@@ -134,7 +137,7 @@ func Scrape(keyword string) error {
 		return err
 	}
 
-	err = wd.Get(searchURL + keyword)
+	err = wd.Get(searchURL)
 	if err != nil {
 		return err
 	}
