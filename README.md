@@ -23,7 +23,7 @@ Tailored for scraping data from social media platforms, powered by Go.
    - **Config:** Configuration file to setup all you need
 
 ## Prerequisites
-   - Go 1.15 or later
+   - Go 1.18 or later
    - Selenium WebDriver
    - Firefox or Chrome Browser
    - Geckodriver (for Firefox) or Chromedriver (for Chrome)
@@ -57,8 +57,8 @@ Tailored for scraping data from social media platforms, powered by Go.
    - `go build -o snagtag`
 
 ## Usage
-   - `./snagtag platform youtube --keyword education` (for YouTube)
-   - `./snagtag platform tiktok --keyword education` (for TikTok)
+   - `./snagtag platform youtube --keyword education`
+   - `./snagtag platform tiktok --keyword education`
 
 ## ENV Variables (for TikTok)
   - `EXPORT TIKTOK_USERNAME='your_tiktok_username'`
