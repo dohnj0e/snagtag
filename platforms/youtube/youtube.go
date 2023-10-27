@@ -60,18 +60,6 @@ func InitWebDriver() (selenium.WebDriver, error) {
 	return wd, nil
 }
 
-func CheckPageLoadState(wd selenium.WebDriver) error {
-	state, err := wd.ExecuteScript("return document.readyState", nil)
-
-	if err != nil {
-		return err
-	}
-	if state != "complete" {
-		logger.Log.Errorln("Page is not loaded yet")
-	}
-	return nil
-}
-
 func ScrollIncrementally(wd selenium.WebDriver, amount int) error {
 	script := fmt.Sprintf("window.scroll(0, %d);", amount)
 	_, err := wd.ExecuteScript(script, nil)
