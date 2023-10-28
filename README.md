@@ -14,7 +14,9 @@ Tailored for scraping data from social media platforms, powered by Go.
     - [Author](#author)
 
 ## Features
-   - **Scraping:** Scrape video titles based on a provided keyword
+   - **Keyword:** Scrape video titles based on a provided keyword
+   - **Hashtag:** Scrape video titles based on a provided hashtag ![new](https://img.shields.io/badge/New-gray)
+   - **Scrolling:** Scrape even more data with infinite scrolling ![New](https://img.shields.io/badge/New-gray)
    - **Command-Line Interface:** Easy-to-use command-line interface
    - **Testing:** Test for youtube and tiktok scraping functionality
    - **Errors/Logging:** Robust error handling and logging system
