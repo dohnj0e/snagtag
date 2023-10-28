@@ -23,7 +23,7 @@ var (
 )
 
 func Init() {
-	cfg, err = config.LoadConfig("/path/to/project/config.yaml") // absolute path
+	cfg, err = config.LoadConfig("/path/to/project/bin/config.yaml") // absolute path
 
 	if err != nil {
 		logger.Log.Errorln("Failed to load config file: ", err)
@@ -74,7 +74,7 @@ func Login(wd selenium.WebDriver) error {
 		return err
 	}
 
-	passwordField, err := wd.FindElement(selenium.ByCSSSelector, "input[placeholder='Password']")
+	passwordField, err := wd.FindElement(selenium.ByCSSSelector, "input[type='password']")
 	if err != nil {
 		return err
 	}
@@ -89,7 +89,7 @@ func Login(wd selenium.WebDriver) error {
 		return err
 	}
 
-	loginButton, err := wd.FindElement(selenium.ByCSSSelector, "button[data-e2e='login-button']")
+	loginButton, err := wd.FindElement(selenium.ByCSSSelector, "button[type='submit']")
 	if err != nil {
 		return err
 	}
@@ -98,9 +98,10 @@ func Login(wd selenium.WebDriver) error {
 		return err
 	}
 
+	fmt.Printf("\n")
 	waitForUser()
 
-	timeout := time.After(30 * time.Second)
+	timeout := time.After(60 * time.Second)
 	ticker := time.NewTicker(500 * time.Millisecond)
 
 	defer ticker.Stop()
@@ -122,11 +123,90 @@ func Login(wd selenium.WebDriver) error {
 	}
 }
 
-func Scrape(keyword string) error {
+func ScrollIncrementally(wd selenium.WebDriver, amount int) error {
+	script := fmt.Sprintf("window.scroll(0, %d);", amount)
+	_, err := wd.ExecuteScript(script, nil)
+	return err
+}
+
+func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
+	existingTitles := map[string]bool{}
 	encodedKeyword := url.QueryEscape(keyword)
 	searchURL = fmt.Sprintf("https://www.tiktok.com/search/video?q=%s", encodedKeyword)
 
+	const MaxIndex = 100 // do not change this
+
+	logger.Log.Infoln("Initiating scraping for keyword:", keyword)
+
+	err := wd.Get(searchURL)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("\n")
+	waitForUser()
+
+	for {
+		time.Sleep(2 * time.Second)
+
+		err = ScrollIncrementally(wd, 500)
+		if err != nil {
+			return err
+		}
+
+		prevScrollPos, err := wd.ExecuteScript("return window.pageYOffset;", nil)
+		if err != nil {
+			return err
+		}
+
+		_, err = wd.ExecuteScript("window.scroll(0, 25000);", nil)
+		if err != nil {
+			logger.Log.Errorln("Failed to scroll: ", err)
+			return err
+		}
+
+		time.Sleep(2 * time.Second)
+
+		currScrollPos, err := wd.ExecuteScript("return window.pageYOffset;", nil)
+		if err != nil {
+			return err
+		}
+
+		if prevScrollPos == currScrollPos {
+			break
+		}
+
+		elements, err := wd.FindElements(selenium.ByCSSSelector, "div.tiktok-1iy6zew-DivContainer")
+		if err != nil {
+			logger.Log.Errorln("Failed to find elements: ", err)
+			return err
+		}
+
+		for index, element := range elements {
+			if index >= MaxIndex {
+				fmt.Printf("\n")
+				logger.Log.Info("Scrape completed successfully")
+				return nil
+			}
+
+			title, err := element.Text()
+			if err != nil {
+				logger.Log.Errorln("Failed to retrieve element text: ", err)
+				continue
+			}
+
+			if title != "" && !existingTitles[title] {
+				fmt.Printf("%d: %s\n", index, title)
+				existingTitles[title] = true
+			}
+		}
+	}
+	return nil
+}
+
+func Scrape(keyword string) error {
 	wd, err := InitWebDriver()
+
 	if err != nil {
 		return err
 	}
@@ -137,30 +217,9 @@ func Scrape(keyword string) error {
 		return err
 	}
 
-	err = wd.Get(searchURL)
+	err = ScrollAndScrape(wd, keyword)
 	if err != nil {
 		return err
 	}
-
-	waitForUser()
-
-	elements, err := wd.FindElements(selenium.ByCSSSelector, "div.tiktok-1iy6zew-DivContainer")
-	if err != nil {
-		logger.Log.Errorln("Failed to find elements: ", err)
-	}
-
-	for index, element := range elements {
-		title, err := element.Text()
-		if err != nil {
-			logger.Log.Errorln("Failed to retrieve element text: ", err)
-		} else {
-			if title != "" {
-				fmt.Printf("%d: %s\n", index, title)
-			}
-		}
-	}
-	fmt.Printf("\n")
-	logger.Log.Info("Scrape completed successfully")
-
 	return nil
 }
