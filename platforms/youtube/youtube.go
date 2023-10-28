@@ -24,7 +24,7 @@ var (
 )
 
 func Init() {
-	cfg, err = config.LoadConfig("/path/to/project/config.yaml") // absolute path
+	cfg, err = config.LoadConfig("/path/to/project/bin/config.yaml") // absolute path
 
 	if err != nil {
 		logger.Log.Errorln("Failed to load config file: ", err)
@@ -71,7 +71,10 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 	encodedKeyword := url.QueryEscape(keyword)
 	searchURL = fmt.Sprintf("https://www.youtube.com/results?search_query=%s", encodedKeyword)
 
-	const MaxIndex = 100
+	const MaxIndex = 100 // do not change this
+
+	fmt.Printf("\n")
+	logger.Log.Infoln("Initiating scraping for keyword:", keyword)
 
 	err := wd.Get(searchURL)
 	if err != nil {
@@ -90,10 +93,12 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 		return err
 	}
 
-	for {
-		time.Sleep(1 * time.Second)
+	fmt.Printf("\n")
 
-		err = ScrollIncrementally(wd, 1000)
+	for {
+		time.Sleep(2 * time.Second)
+
+		err = ScrollIncrementally(wd, 500)
 		if err != nil {
 			return err
 		}
@@ -109,7 +114,7 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 			return err
 		}
 
-		time.Sleep(1 * time.Second)
+		time.Sleep(2 * time.Second)
 
 		currScrollPos, err := wd.ExecuteScript("return window.pageYOffset;", nil)
 		if err != nil {
@@ -153,14 +158,11 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 }
 
 func Scrape(keyword string) error {
-	encodedKeyword := url.QueryEscape(keyword)
-	searchURL = fmt.Sprintf("https://www.youtube.com/results?search_query=%s", encodedKeyword)
-
 	wd, err := InitWebDriver()
+
 	if err != nil {
 		return err
 	}
-
 	defer wd.Quit()
 	defer service.Stop()
 
