@@ -49,7 +49,7 @@ func InitWebDriver() (selenium.WebDriver, error) {
 
 	caps := selenium.Capabilities{
 		"browserName":             "chrome",
-		"chrome_binary":           "/usr/bin/chrome",
+		"chrome_binary":           chromeDriverPath,
 		"webdriver.chrome.driver": chromeDriverPath,
 	}
 	wd, err := selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", port))
@@ -71,7 +71,7 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 	encodedKeyword := url.QueryEscape(keyword)
 	searchURL = fmt.Sprintf("https://www.youtube.com/results?search_query=%s", encodedKeyword)
 
-	const MaxIndex = 100 // do not change this
+	const MaxIndex = 125
 
 	fmt.Printf("\n")
 	logger.Log.Infoln("Initiating scraping for keyword:", keyword)
@@ -81,22 +81,21 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 		return err
 	}
 
-	closeButton, err := wd.FindElement(selenium.ByCSSSelector, "button.yt-spec-button-shape-next.yt-spec-button-shape-next--filled.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--size-m")
-	if err != nil {
-		logger.Log.Error("Failed to find the 'accept all' button: ", err)
-		return err
-	}
-
-	err = closeButton.Click()
-	if err != nil {
-		logger.Log.Error("Failed to click the 'accept all' button: ", err)
-		return err
-	}
-
 	fmt.Printf("\n")
+	closeButton, err := wd.FindElement(selenium.ByCSSSelector, "button.yt-spec-button-shape-next.yt-spec-button-shape-next--filled.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--size-m")
+
+	if err != nil {
+		logger.Log.Warn("Failed to find the 'accept all' button: ", err)
+	} else {
+		err = closeButton.Click()
+		if err != nil {
+			logger.Log.Error("Failed to click the 'accept all' button: ", err)
+			return err
+		}
+	}
 
 	for {
-		time.Sleep(2 * time.Second)
+		time.Sleep(3 * time.Second)
 
 		err = ScrollIncrementally(wd, 500)
 		if err != nil {
@@ -108,13 +107,13 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 			return err
 		}
 
-		_, err = wd.ExecuteScript("window.scroll(0, 25000);", nil)
+		_, err = wd.ExecuteScript("window.scroll(0, 45000);", nil)
 		if err != nil {
 			logger.Log.Errorln("Failed to scroll: ", err)
 			return err
 		}
 
-		time.Sleep(2 * time.Second)
+		time.Sleep(5 * time.Second)
 
 		currScrollPos, err := wd.ExecuteScript("return window.pageYOffset;", nil)
 		if err != nil {

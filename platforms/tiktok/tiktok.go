@@ -35,7 +35,7 @@ func Init() {
 	searchURL = cfg.TiktokSearchURL
 }
 
-func waitForUser() {
+func WaitForUser() {
 	logger.Log.Warnln("Please solve the captcha, then press Enter to continue...")
 	var input string
 	fmt.Scanln(&input)
@@ -53,7 +53,7 @@ func InitWebDriver() (selenium.WebDriver, error) {
 
 	caps := selenium.Capabilities{
 		"browserName":             "chrome",
-		"chrome_binary":           "/usr/bin/chrome",
+		"chrome_binary":           chromeDriverPath,
 		"webdriver.chrome.driver": chromeDriverPath,
 	}
 	wd, err := selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", port))
@@ -99,7 +99,7 @@ func Login(wd selenium.WebDriver) error {
 	}
 
 	fmt.Printf("\n")
-	waitForUser()
+	WaitForUser()
 
 	timeout := time.After(60 * time.Second)
 	ticker := time.NewTicker(500 * time.Millisecond)
@@ -134,20 +134,20 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 	encodedKeyword := url.QueryEscape(keyword)
 	searchURL = fmt.Sprintf("https://www.tiktok.com/search/video?q=%s", encodedKeyword)
 
-	const MaxIndex = 100 // do not change this
+	const MaxIndex = 125 // do not change this
 
 	logger.Log.Infoln("Initiating scraping for keyword:", keyword)
+	fmt.Printf("\n")
 
 	err := wd.Get(searchURL)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("\n")
-	waitForUser()
+	WaitForUser()
 
 	for {
-		time.Sleep(2 * time.Second)
+		time.Sleep(3 * time.Second)
 
 		err = ScrollIncrementally(wd, 500)
 		if err != nil {
@@ -159,13 +159,13 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 			return err
 		}
 
-		_, err = wd.ExecuteScript("window.scroll(0, 25000);", nil)
+		_, err = wd.ExecuteScript("window.scroll(0, 45000);", nil)
 		if err != nil {
 			logger.Log.Errorln("Failed to scroll: ", err)
 			return err
 		}
 
-		time.Sleep(2 * time.Second)
+		time.Sleep(5 * time.Second)
 
 		currScrollPos, err := wd.ExecuteScript("return window.pageYOffset;", nil)
 		if err != nil {

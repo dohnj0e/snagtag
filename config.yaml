@@ -1,5 +1,5 @@
 seleniumPath: "/path/to/project/bin/selenium-server-standalone-3.141.59.jar" # absolute path
-chromeDriverPath: "path/to/project/bin/chromedriver"
+chromeDriverPath: "/usr/bin/chrome"
 port: 4444
 youtubeSearchURL: "https://youtube.com/results?search_query="
 tiktokSearchURL: "https://www.tiktok.com/search/video?q="
