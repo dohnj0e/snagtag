@@ -2,7 +2,8 @@
 
 Tailored for scraping data from social media platforms, powered by Go.
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow.svg)](https://www.buymeacoffee.com/dohnj0) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) [![Tested on Ubuntu](https://img.shields.io/badge/Tested%20on-Ubuntu-orange.svg)](https://www.ubuntu.com/) [![Beta Version](https://img.shields.io/badge/Stable%20Version-1.1.0--stable-green.svg)](https://github.com/dohnj0e/snagtag/releases/tag/v1.1.0-stable)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow.svg)](https://www.buymeacoffee.com/dohnj0) [![Ko-fi](https://img.shields.io/badge/Support%20Me%20on-Ko--fi-red.svg?style=flat&logo=ko-fi)](YOUR_KO_FI_URL)
+ [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) [![Tested on Ubuntu](https://img.shields.io/badge/Tested%20on-Ubuntu-orange.svg)](https://www.ubuntu.com/) [![Beta Version](https://img.shields.io/badge/Stable%20Version-1.1.0--stable-green.svg)](https://github.com/dohnj0e/snagtag/releases/tag/v1.1.0-stable)
 
 ## Table of Contents
   - [Table of Contents](#table-of-contents)
