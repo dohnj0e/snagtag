@@ -2,9 +2,7 @@ package tiktok
 
 import (
 	"fmt"
-	"net/url"
 	"os"
-	"time"
 
 	"github.com/dohnj0e/snagtag/config"
 	"github.com/dohnj0e/snagtag/logger"
@@ -23,7 +21,7 @@ var (
 )
 
 func Init() {
-	cfg, err = config.LoadConfig("/path/to/project/config.yaml") // absolute path
+	cfg, err = config.LoadConfig("/home/ian/Documents/DEV/projects/go/snagtag/config.yaml") // absolute path
 
 	if err != nil {
 		logger.Log.Errorln("Failed to load config file: ", err)
@@ -62,146 +60,6 @@ func InitWebDriver() (selenium.WebDriver, error) {
 		return nil, err
 	}
 	return wd, nil
-}
-
-func Login(wd selenium.WebDriver) error {
-	if err := wd.Get("https://www.tiktok.com/login/phone-or-email/email"); err != nil {
-		return err
-	}
-
-	usernameField, err := wd.FindElement(selenium.ByCSSSelector, "input[name='username']")
-	if err != nil {
-		return err
-	}
-
-	passwordField, err := wd.FindElement(selenium.ByCSSSelector, "input[type='password']")
-	if err != nil {
-		return err
-	}
-
-	username := os.Getenv("TIKTOK_USERNAME")
-	if err := usernameField.SendKeys(username); err != nil {
-		return err
-	}
-
-	password := os.Getenv("TIKTOK_PASSWORD")
-	if err := passwordField.SendKeys(password); err != nil {
-		return err
-	}
-
-	loginButton, err := wd.FindElement(selenium.ByCSSSelector, "button[type='submit']")
-	if err != nil {
-		return err
-	}
-
-	if err := loginButton.Click(); err != nil {
-		return err
-	}
-
-	fmt.Printf("\n")
-	WaitForUser()
-
-	timeout := time.After(60 * time.Second)
-	ticker := time.NewTicker(500 * time.Millisecond)
-
-	defer ticker.Stop()
-
-	for {
-		select {
-		case <-timeout:
-			logger.Log.Errorln("Timed out waiting for login to complete")
-		case <-ticker.C:
-			currentURL, err := wd.CurrentURL()
-
-			if err != nil {
-				return err
-			}
-			if currentURL == "https://www.tiktok.com/foryou?lang=en" {
-				return nil // login successful
-			}
-		}
-	}
-}
-
-func ScrollIncrementally(wd selenium.WebDriver, amount int) error {
-	script := fmt.Sprintf("window.scroll(0, %d);", amount)
-	_, err := wd.ExecuteScript(script, nil)
-	return err
-}
-
-func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
-	existingTitles := map[string]bool{}
-	encodedKeyword := url.QueryEscape(keyword)
-	searchURL = fmt.Sprintf("https://www.tiktok.com/search/video?q=%s", encodedKeyword)
-
-	const MaxIndex = 125 // do not change this
-
-	logger.Log.Infoln("Initiating scraping for keyword:", keyword)
-	fmt.Printf("\n")
-
-	err := wd.Get(searchURL)
-	if err != nil {
-		return err
-	}
-
-	WaitForUser()
-
-	for {
-		time.Sleep(3 * time.Second)
-
-		err = ScrollIncrementally(wd, 500)
-		if err != nil {
-			return err
-		}
-
-		prevScrollPos, err := wd.ExecuteScript("return window.pageYOffset;", nil)
-		if err != nil {
-			return err
-		}
-
-		_, err = wd.ExecuteScript("window.scroll(0, 45000);", nil)
-		if err != nil {
-			logger.Log.Errorln("Failed to scroll: ", err)
-			return err
-		}
-
-		time.Sleep(5 * time.Second)
-
-		currScrollPos, err := wd.ExecuteScript("return window.pageYOffset;", nil)
-		if err != nil {
-			return err
-		}
-
-		if prevScrollPos == currScrollPos {
-			break
-		}
-
-		elements, err := wd.FindElements(selenium.ByCSSSelector, "div.tiktok-1iy6zew-DivContainer")
-		if err != nil {
-			logger.Log.Errorln("Failed to find elements: ", err)
-			return err
-		}
-
-		for index, element := range elements {
-			if index >= MaxIndex {
-				fmt.Printf("\n")
-				logger.Log.Info("Scrape completed successfully")
-				return nil
-			}
-
-			title, err := element.Text()
-			if err != nil {
-				logger.Log.Errorln("Failed to retrieve element text: ", err)
-				continue
-			}
-
-			if title != "" && !existingTitles[title] {
-				fmt.Printf("%d: %s\n", index, title)
-				existingTitles[title] = true
-			}
-		}
-	}
-	return nil
 }
 
 func Scrape(keyword string) error {

@@ -6,6 +6,8 @@ require github.com/spf13/cobra v1.7.0 // direct
 
 require github.com/tebeka/selenium v0.9.9
 
+require github.com/rivo/uniseg v0.4.4 // direct
+
 require (
 	github.com/blang/semver v3.5.1+incompatible // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
