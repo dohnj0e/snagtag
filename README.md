@@ -64,8 +64,8 @@ Tailored for scraping data from social media platforms, powered by Go.
    - `./snagtag platform tiktok --keyword education`
 
 ## ENV Variables (for TikTok)
-  - `EXPORT TIKTOK_USERNAME='your_tiktok_username'`
-  - `EXPORT TIKTOK_PASSWORD='your_tiktok_password'`
+  - `export TIKTOK_USERNAME='your_tiktok_username'`
+  - `export TIKTOK_PASSWORD='your_tiktok_password'`
 
 ## Support
 
