@@ -18,7 +18,7 @@ Scrape social media platforms such as Youtube and Tiktok, powered by Go
    - **Keyword:** Scrape video titles based on a provided keyword
    - **Hashtag:** Scrape video titles based on a provided hashtag ![new](https://img.shields.io/badge/New-gray)
    - **Scrolling:** Scrape even more data with infinite scrolling ![New](https://img.shields.io/badge/New-gray)
-   - **Readability:** Removed emojis and added color coding ![New](https://img.shields.io/badge/New-gray)
+   - **Readability:** Removed emojis and added custom colors ![New](https://img.shields.io/badge/New-gray)
    - **Command-Line Interface:** Easy-to-use command-line interface
    - **Testing:** Test for youtube and tiktok scraping functionality
    - **Errors/Logging:** Robust error handling and logging system
