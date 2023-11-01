@@ -9,6 +9,12 @@ import (
 	"github.com/tebeka/selenium"
 )
 
+func WaitForUser() {
+	logger.Log.Warnln("Please solve the captcha, then press Enter to continue...")
+	var input string
+	fmt.Scanln(&input)
+}
+
 func Login(wd selenium.WebDriver) error {
 	if err := wd.Get("https://www.tiktok.com/login/phone-or-email/email"); err != nil {
 		return err
@@ -62,7 +68,7 @@ func Login(wd selenium.WebDriver) error {
 				return err
 			}
 			if currentURL == "https://www.tiktok.com/foryou?lang=en" {
-				return nil // login successful
+				return nil
 			}
 		}
 	}

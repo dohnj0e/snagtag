@@ -21,7 +21,7 @@ var (
 )
 
 func Init() {
-	cfg, err = config.LoadConfig("/path/to/project/config.yaml") // absolute path
+	cfg, err = config.LoadConfig("/home/ian/Documents/DEV/projects/go/snagtag/config.yaml") // absolute path
 
 	if err != nil {
 		logger.Log.Errorln("Failed to load config file: ", err)
@@ -49,6 +49,7 @@ func InitWebDriver() (selenium.WebDriver, error) {
 		"chrome_binary":           chromeDriverPath,
 		"webdriver.chrome.driver": chromeDriverPath,
 	}
+
 	wd, err := selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", port))
 
 	if err != nil {

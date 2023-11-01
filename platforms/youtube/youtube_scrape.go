@@ -50,7 +50,7 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 	encodedKeyword := url.QueryEscape(keyword)
 	searchURL = fmt.Sprintf("https://www.youtube.com/results?search_query=%s", encodedKeyword)
 
-	const MaxIndex = 125
+	const MaxIndex = 125 // do not change this
 
 	fmt.Printf("\n")
 	logger.Log.Infoln("Initiating scraping for keyword:", keyword)
@@ -92,7 +92,7 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 			return err
 		}
 
-		time.Sleep(5 * time.Second)
+		time.Sleep(3 * time.Second)
 
 		currScrollPos, err := wd.ExecuteScript("return window.pageYOffset;", nil)
 		if err != nil {

@@ -21,7 +21,7 @@ var (
 )
 
 func Init() {
-	cfg, err = config.LoadConfig("/path/to/project/config.yaml") // absolute path
+	cfg, err = config.LoadConfig("/home/ian/Documents/DEV/projects/go/snagtag/config.yaml") // absolute path
 
 	if err != nil {
 		logger.Log.Errorln("Failed to load config file: ", err)
@@ -31,12 +31,6 @@ func Init() {
 	chromeDriverPath = cfg.ChromeDriverPath
 	port = cfg.Port
 	searchURL = cfg.TiktokSearchURL
-}
-
-func WaitForUser() {
-	logger.Log.Warnln("Please solve the captcha, then press Enter to continue...")
-	var input string
-	fmt.Scanln(&input)
 }
 
 func InitWebDriver() (selenium.WebDriver, error) {
@@ -54,6 +48,7 @@ func InitWebDriver() (selenium.WebDriver, error) {
 		"chrome_binary":           chromeDriverPath,
 		"webdriver.chrome.driver": chromeDriverPath,
 	}
+
 	wd, err := selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", port))
 
 	if err != nil {
