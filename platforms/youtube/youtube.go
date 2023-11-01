@@ -21,7 +21,7 @@ var (
 )
 
 func Init() {
-	cfg, err = config.LoadConfig("/home/ian/Documents/DEV/projects/go/snagtag/config.yaml") // absolute path
+	cfg, err = config.LoadConfig("/path/to/project/config.yaml") // absolute path
 
 	if err != nil {
 		logger.Log.Errorln("Failed to load config file: ", err)
