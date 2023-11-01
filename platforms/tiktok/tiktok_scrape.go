@@ -3,11 +3,18 @@ package tiktok
 import (
 	"fmt"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/dohnj0e/snagtag/logger"
 	"github.com/rivo/uniseg"
 	"github.com/tebeka/selenium"
+)
+
+const (
+	grayColor  = "\033[37m"
+	cyanColor  = "\033[0;36m"
+	resetColor = "\033[0m"
 )
 
 func IsEmoji(s string) bool {
@@ -36,6 +43,25 @@ func RemoveEmojis(s string) string {
 		}
 	}
 	return result
+}
+
+func PrintWithColor(text string, colorCode string) {
+	fmt.Printf("%s%s%s", colorCode, text, resetColor)
+}
+
+func PrintTextWithHashtags(index int, text string) {
+	words := strings.Fields(text)
+	for i, word := range words {
+		if strings.HasPrefix(word, "#") {
+			PrintWithColor(word, cyanColor)
+		} else {
+			PrintWithColor(word, grayColor)
+		}
+		if i < len(words)-1 {
+			fmt.Print(" ")
+		}
+	}
+	fmt.Println()
 }
 
 func ScrollIncrementally(wd selenium.WebDriver, amount int) error {
@@ -113,7 +139,7 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 			}
 
 			if title != "" && !existingTitles[title] {
-				fmt.Printf("%d: %s\n", index, titleWithoutEmojis)
+				PrintTextWithHashtags(index, fmt.Sprintf("%d: %s", index, titleWithoutEmojis))
 				existingTitles[title] = true
 			}
 		}
