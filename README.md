@@ -3,7 +3,7 @@
 Scrape social media platforms such as Youtube and Tiktok, powered by Go
 
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow.svg)](https://www.buymeacoffee.com/dohnj0)
- [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) [![Tested on Ubuntu](https://img.shields.io/badge/Tested%20on-Ubuntu-orange.svg)](https://www.ubuntu.com/) [![Beta Version](https://img.shields.io/badge/Stable%20Version-1.1.0--stable-green.svg)](https://github.com/dohnj0e/snagtag/releases/tag/v1.1.0-stable)
+ [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) [![Tested on Ubuntu](https://img.shields.io/badge/Tested%20on-Ubuntu-orange.svg)](https://www.ubuntu.com/) [![Beta Version](https://img.shields.io/badge/Stable%20Version-1.2.0--stable-green.svg)](https://github.com/dohnj0e/snagtag/releases/tag/v1.2.0-stable)
 
 ## Table of Contents
   - [Table of Contents](#table-of-contents)
@@ -18,6 +18,7 @@ Scrape social media platforms such as Youtube and Tiktok, powered by Go
    - **Keyword:** Scrape video titles based on a provided keyword
    - **Hashtag:** Scrape video titles based on a provided hashtag ![new](https://img.shields.io/badge/New-gray)
    - **Scrolling:** Scrape even more data with infinite scrolling ![New](https://img.shields.io/badge/New-gray)
+   - **Readability:** Removed emojis and added color coding ![New](https://img.shields.io/badge/New-gray)
    - **Command-Line Interface:** Easy-to-use command-line interface
    - **Testing:** Test for youtube and tiktok scraping functionality
    - **Errors/Logging:** Robust error handling and logging system
