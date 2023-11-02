@@ -26,7 +26,8 @@ func IsEmoji(s string) bool {
 			(r >= 0x1F780 && r <= 0x1F7FF) ||
 			(r >= 0x1F800 && r <= 0x1F8FF) ||
 			(r >= 0x1F900 && r <= 0x1F9FF) ||
-			(r >= 0x1FA00 && r <= 0x1FA6F) {
+			(r >= 0x1FA00 && r <= 0x1FA6F) ||
+			(r == 0x2665) {
 			return true
 		}
 	}
@@ -35,12 +36,22 @@ func IsEmoji(s string) bool {
 
 func RemoveEmojis(s string) string {
 	var result string
+	var clusters []string
+
 	gr := uniseg.NewGraphemes(s)
 	for gr.Next() {
-		cluster := gr.Str()
-		if !IsEmoji(cluster) {
-			result += cluster
+		clusters = append(clusters, gr.Str())
+	}
+
+	for i, cluster := range clusters {
+		if cluster == "#" {
+			if i < len(clusters)-1 && !strings.ContainsAny(clusters[i+1], "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789") {
+				continue
+			}
+		} else if IsEmoji(cluster) {
+			continue
 		}
+		result += cluster
 	}
 	return result
 }
@@ -138,7 +149,7 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 				continue
 			}
 
-			if title != "" && !existingTitles[title] {
+			if titleWithoutEmojis != "" && !existingTitles[title] {
 				PrintTextWithHashtags(index, fmt.Sprintf("%d: %s", index, titleWithoutEmojis))
 				existingTitles[title] = true
 			}
