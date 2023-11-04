@@ -24,7 +24,7 @@ Scrape social media platforms such as Youtube and Tiktok, powered by Go
    - **Errors/Logging:** Robust error handling and logging system
    - **Authentication:** Automated login system
    - **Captcha:** Waits user to interact with captcha
-   - **Config:** Configuration file to setup all
+   - **Config:** Configuration file to setup all you need
 
 ## Prerequisites
    - Go 1.18 or later
