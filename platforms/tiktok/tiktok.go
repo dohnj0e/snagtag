@@ -3,6 +3,7 @@ package tiktok
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/dohnj0e/snagtag/config"
 	"github.com/dohnj0e/snagtag/logger"
@@ -21,10 +22,16 @@ var (
 )
 
 func Init() {
-	cfg, err = config.LoadConfig("/path/to/project/config.yaml") // absolute path
+	cfg, err = config.LoadConfig("config.yaml")
 
+	seleniumPath, err = filepath.Abs(cfg.SeleniumPath)
 	if err != nil {
-		logger.Log.Errorln("Failed to load config file: ", err)
+		logger.Log.Errorln("Failed to get absolute path for selenium: ", err)
+	}
+
+	chromeDriverPath, err = filepath.Abs(cfg.ChromeDriverPath)
+	if err != nil {
+		logger.Log.Errorln("Failed to get absolute path for chrome driver: ", err)
 	}
 
 	seleniumPath = cfg.SeleniumPath

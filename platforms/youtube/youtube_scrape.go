@@ -96,8 +96,8 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 		return err
 	}
 
-	fmt.Printf("\n")
-	closeButton, err := wd.FindElement(selenium.ByCSSSelector, "button.yt-spec-button-shape-next.yt-spec-button-shape-next--filled.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--size-m")
+	time.Sleep(1 * time.Second)
+	closeButton, err := wd.FindElement(selenium.ByCSSSelector, "button[aria-label='Accept the use of cookies and other data for the purposes described']")
 
 	if err != nil {
 		logger.Log.Warn("Failed to find the 'accept all' button: ", err)
@@ -110,6 +110,7 @@ func ScrollAndScrape(wd selenium.WebDriver, keyword string) error {
 			return err
 		}
 	}
+	fmt.Printf("\n")
 
 	for {
 		time.Sleep(3 * time.Second)

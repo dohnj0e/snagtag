@@ -1,6 +1,7 @@
 package tiktok
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"time"
@@ -15,10 +16,29 @@ func WaitForUser() {
 	fmt.Scanln(&input)
 }
 
+func WaitForElement(wd selenium.WebDriver, selector string, timeout time.Duration) (selenium.WebElement, error) {
+	var element selenium.WebElement
+	var err error
+
+	endTime := time.Now().Add(timeout)
+
+	for time.Now().Before(endTime) {
+		element, err = wd.FindElement(selenium.ByCSSSelector, selector)
+
+		if err == nil {
+			return element, nil
+		}
+		time.Sleep(500 * time.Millisecond)
+	}
+	return nil, errors.New("timed out waiting for element: " + selector)
+}
+
 func Login(wd selenium.WebDriver) error {
 	if err := wd.Get("https://www.tiktok.com/login/phone-or-email/email"); err != nil {
 		return err
 	}
+
+	time.Sleep(2 * time.Second)
 
 	usernameField, err := wd.FindElement(selenium.ByCSSSelector, "input[name='username']")
 	if err != nil {
@@ -40,7 +60,9 @@ func Login(wd selenium.WebDriver) error {
 		return err
 	}
 
-	loginButton, err := wd.FindElement(selenium.ByCSSSelector, "button[type='submit']")
+	time.Sleep(2 * time.Second)
+
+	loginButton, err := WaitForElement(wd, "button[type='submit']", 10*time.Second)
 	if err != nil {
 		return err
 	}
