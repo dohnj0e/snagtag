@@ -22,9 +22,9 @@ Scrape social media platforms such as Youtube and Tiktok, powered by Go
    - **Command-Line Interface:** Easy-to-use command-line interface
    - **Testing:** Test for youtube and tiktok scraping functionality
    - **Errors/Logging:** Robust error handling and logging system
-   - **Authentication:** Handling authentication to Tiktok
-   - **Captcha:** Waits user to interact with captcha before proceeding
-   - **Config:** Configuration file to setup all you need
+   - **Authentication:** Automated login system
+   - **Captcha:** Waits user to interact with captcha
+   - **Config:** Configuration file to setup all
 
 ## Prerequisites
    - Go 1.18 or later
