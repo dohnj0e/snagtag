@@ -15,8 +15,7 @@ Scrape social media platforms such as Youtube and Tiktok, powered by Go
     - [Author](#author)
 
 ## Features
-   - **Keyword:** Scrape video titles based on a provided keyword
-   - **Hashtag:** Scrape video titles based on a provided hashtag
+   - **Scraping:** Scrape video titles based on a provided keyword
    - **Scrolling:** Scrape even more data with infinite scrolling
    - **Readability:** Removed emojis and added custom colors
    - **Command-Line Interface:** Easy-to-use command-line interface
